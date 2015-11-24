@@ -30,8 +30,9 @@ class GTestConan(ConanFile):
         else:
             self.run("mkdir _build")
         cd_build = "cd _build"
+        force = "-Dgtest_force_shared_crt=ON"
         shared = "-DBUILD_SHARED_LIBS=1" if self.options.shared else ""
-        self.run('%s && cmake .. %s %s' % (cd_build, cmake.command_line, shared))
+        self.run('%s && cmake .. %s %s %s' % (cd_build, cmake.command_line, shared, force))
         self.run("%s && cmake --build . %s" % (cd_build, cmake.build_config))
 
     def package(self):

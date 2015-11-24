@@ -14,12 +14,16 @@ if __name__ == "__main__":
 
 
     if platform.system() == "Windows":
-        compiler = '-s compiler="Visual Studio" -s compiler.version=14 '
+        compiler = '-s compiler="Visual Studio" -s compiler.version=12 '
         # Static x86
+        test(compiler + '-s arch=x86 -s build_type=Debug -s compiler.runtime=MDd -o gtest:shared=False')
+        test(compiler + '-s arch=x86 -s build_type=Release -s compiler.runtime=MD -o gtest:shared=False')
         test(compiler + '-s arch=x86 -s build_type=Debug -s compiler.runtime=MTd -o gtest:shared=False')
         test(compiler + '-s arch=x86 -s build_type=Release -s compiler.runtime=MT -o gtest:shared=False')
 
         # Static x86_64
+        test(compiler + '-s arch=x86_64 -s build_type=Debug -s compiler.runtime=MDd -o gtest:shared=False')
+        test(compiler + '-s arch=x86_64 -s build_type=Release -s compiler.runtime=MD -o gtest:shared=False')
         test(compiler + '-s arch=x86_64 -s build_type=Debug -s compiler.runtime=MTd -o gtest:shared=False')
         test(compiler + '-s arch=x86_64 -s build_type=Release -s compiler.runtime=MT -o gtest:shared=False')
 
