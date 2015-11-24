@@ -12,7 +12,7 @@ class GTestConan(ConanFile):
     generators = "cmake"
     settings = "os", "arch", "compiler", "build_type"
     options = {"shared": [True, False]}
-    default_options = "shared=False"
+    default_options = "shared=True"
     exports = "CMakeLists.txt"
     url="http://github.com/lasote/conan-gtest"
 
