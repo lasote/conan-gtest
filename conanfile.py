@@ -15,6 +15,7 @@ class GTestConan(ConanFile):
     default_options = "shared=True"
     exports = "CMakeLists.txt"
     url="http://github.com/lasote/conan-gtest"
+    license="https://github.com/google/googletest/blob/master/googletest/LICENSE"
 
     def source(self):
         zip_name = "gtest-%s.zip" % self.version

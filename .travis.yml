@@ -1,24 +1,40 @@
-language: cpp
-compiler:
-- gcc
-install:
-# Install gcc-multilib (fixed some errors)
-- sudo apt-get update -qq
-- sudo apt-get install gcc-multilib
-# Install CMake 3
-- wget https://s3.amazonaws.com/biibinaries/thirdparty/cmake-3.0.2-Linux-64.tar.gz
-- tar -xzf cmake-3.0.2-Linux-64.tar.gz
-- sudo cp -fR cmake-3.0.2-Linux-64/* /usr
-- rm -rf cmake-3.0.2-Linux-64
-- rm cmake-3.0.2-Linux-64.tar.gz
-# Download conan
-- wget $CONAN_URL -O conan.deb
-- sudo dpkg -i conan.deb
-- rm conan.deb
-# Adjust config and settings
-- conan user lasote
-- echo -e "\ncompiler=gcc" >> ~/.conan/conan.conf
-- echo -e "\ncompiler.version=$(gcc -dumpversion)" >> ~/.conan/conan.conf
+os: linux
+services:
+   - docker
+sudo: required
+language: python
+env:
+  global:
+    - CONAN_UPLOAD=1
+    - CONAN_REFERENCE="gtest/1.7.0"
+    - CONAN_USERNAME="lasote"
+    - CONAN_CHANNEL="ci"
+    - CONAN_TOTAL_PAGES=1
+    - CONAN_CURRENT_PAGE=1
 
+  matrix:
+    - CONAN_GCC_VERSIONS=4.6 CONAN_USE_DOCKER=1
+    - CONAN_GCC_VERSIONS=4.8 CONAN_USE_DOCKER=1
+    - CONAN_GCC_VERSIONS=4.9 CONAN_USE_DOCKER=1 
+    - CONAN_GCC_VERSIONS=5.2 CONAN_USE_DOCKER=1
+    - CONAN_GCC_VERSIONS=5.3 CONAN_USE_DOCKER=1
+matrix:
+   include:
+       - os: osx 
+         osx_image: xcode7.1 # apple-clang 7.0
+         language: generic
+         env:
+       - os: osx
+         osx_image: xcode6.4 # apple-clang 6.1
+         language: generic
+         env:
+       - os: osx 
+         osx_image: xcode6.2 # apple-clang 6.0
+         language: generic
+         env:
+
+install:
+  - ./.travis/install.sh
 script:
-- python build.py
+  - ./.travis/run.sh
+  
