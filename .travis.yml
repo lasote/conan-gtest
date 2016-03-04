@@ -11,7 +11,7 @@ env:
     - CONAN_CHANNEL="ci"
     - CONAN_TOTAL_PAGES=1
     - CONAN_CURRENT_PAGE=1
-    - CONAN_PIP_PACKAGE="conan==0.0.1rc7"
+    - CONAN_PIP_PACKAGE="conan==0.0.1rc9"
 
   matrix:
     - CONAN_GCC_VERSIONS=4.6 CONAN_USE_DOCKER=1
