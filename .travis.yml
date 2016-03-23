@@ -11,7 +11,6 @@ env:
     - CONAN_CHANNEL="ci"
     - CONAN_TOTAL_PAGES=1
     - CONAN_CURRENT_PAGE=1
-    - CONAN_PIP_PACKAGE="conan==0.0.1rc9"
 
   matrix:
     - CONAN_GCC_VERSIONS=4.6 CONAN_USE_DOCKER=1
@@ -21,6 +20,10 @@ env:
     - CONAN_GCC_VERSIONS=5.3 CONAN_USE_DOCKER=1
 matrix:
    include:
+       - os: osx 
+         osx_image: xcode7.3 # apple-clang 7.3
+         language: generic
+         env:
        - os: osx 
          osx_image: xcode7.1 # apple-clang 7.0
          language: generic
