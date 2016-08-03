@@ -18,10 +18,6 @@ class GTestConan(ConanFile):
     url="http://github.com/lasote/conan-gtest"
     license="https://github.com/google/googletest/blob/master/googletest/LICENSE"
     
-    def config(self):
-        if self.settings.os == "Macos":
-            self.settings.compiler.libcxx = "libc++"
-
     def source(self):
         zip_name = "gtest-%s.zip" % self.version
         url = "https://googletest.googlecode.com/files/%s" % zip_name

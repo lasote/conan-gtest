@@ -9,10 +9,6 @@ class DefaultNameConan(ConanFile):
     settings = "os", "compiler", "arch", "build_type"
     generators = "cmake"
     requires = "gtest/1.7.0@lasote/stable"
-    
-    def config(self):
-        if self.settings.os == "Macos":
-            self.settings.compiler.libcxx = "libc++"
         
     def build(self):
         cmake = CMake(self.settings)
