@@ -9,10 +9,10 @@ class DefaultNameConan(ConanFile):
     settings = "os", "compiler", "arch", "build_type"
     generators = "cmake"
     requires = "gtest/1.7.0@lasote/stable"
-
+        
     def build(self):
         cmake = CMake(self.settings)
-        self.run('cmake . %s' % cmake.command_line)
+        self.run('cmake %s %s' % (self.conanfile_directory, cmake.command_line))
         self.run("cmake --build . %s" % cmake.build_config)
 
     def imports(self):

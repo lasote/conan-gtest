@@ -1,2 +1,6 @@
 build
 *.pyc
+/_build
+conanbuildinfo.cmake
+conaninfo.txt
+/gtest-1.7.0
