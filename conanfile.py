@@ -9,7 +9,7 @@ from conans import CMake
 class GTestConan(ConanFile):
     name = "gtest"
     version = "1.7.0"
-    ZIP_FOLDER_NAME = "gtest-%s" % version
+    ZIP_FOLDER_NAME = "googletest-release-%s" % version
     generators = "cmake"
     settings = "os", "arch", "compiler", "build_type"
     options = {"shared": [True, False]}
@@ -19,8 +19,8 @@ class GTestConan(ConanFile):
     license="https://github.com/google/googletest/blob/master/googletest/LICENSE"
     
     def source(self):
-        zip_name = "gtest-%s.zip" % self.version
-        url = "https://googletest.googlecode.com/files/%s" % zip_name
+        zip_name = "release-%s.zip" % self.version
+        url = "https://github.com/google/googletest/archive/%s" % zip_name
         download(url, zip_name)
         unzip(zip_name)
         os.unlink(zip_name)
