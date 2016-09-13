@@ -8,17 +8,11 @@ if __name__ == "__main__":
     for settings, options in builder.builds:
         if settings["compiler"] == "Visual Studio":
             pdbOptions = options.copy()
-            noPdbOptions = options.copy()
-            
             pdbOptions.update({"gtest:include_pdbs": "True"})
-            noPdbOptions.update({"gtest:include_pdbs": "False"})
-            
-            filtered_builds.append([settings, options])
             filtered_builds.append([settings, pdbOptions])
-            filtered_builds.append([settings, noPdbOptions])
-        else:
-            filtered_builds.append([settings, options])
-    
+        
+        filtered_builds.append([settings, options])
+
     builder.builds = filtered_builds
     builder.run()
 
