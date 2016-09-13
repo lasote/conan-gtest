@@ -32,6 +32,7 @@ If you handle multiple dependencies in your project is better to add a *conanfil
 
     [options]
     gtest:shared=true # false
+    gtest:include_pdbs=false # MSVC - include debug symbols
     
     [generators]
     txt

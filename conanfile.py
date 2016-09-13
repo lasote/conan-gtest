@@ -18,6 +18,10 @@ class GTestConan(ConanFile):
     url="http://github.com/lasote/conan-gtest"
     license="https://github.com/google/googletest/blob/master/googletest/LICENSE"
     
+    def config_options(self):
+        if self.settings.compiler != "Visual Studio":
+            del self.options.include_pdbs
+    
     def source(self):
         zip_name = "release-%s.zip" % self.version
         url = "https://github.com/google/googletest/archive/%s" % zip_name
@@ -48,8 +52,8 @@ class GTestConan(ConanFile):
         self.copy(pattern="*.so*", dst="lib", src=".", keep_path=False)
         self.copy(pattern="*.dylib*", dst="lib", src=".", keep_path=False)      
         
-        # Debug files
-        if self.options.include_pdbs:
+        # Copying debug symbols
+        if self.settings.compiler == "Visual Studio" and self.options.include_pdbs:
             self.copy(pattern="*.pdb", dst="lib", src=".", keep_path=False)
 
     def package_info(self):
