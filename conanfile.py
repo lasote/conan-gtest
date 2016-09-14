@@ -12,11 +12,15 @@ class GTestConan(ConanFile):
     ZIP_FOLDER_NAME = "googletest-release-%s" % version
     generators = "cmake"
     settings = "os", "arch", "compiler", "build_type"
-    options = {"shared": [True, False]}
-    default_options = "shared=True"
+    options = {"shared": [True, False], "include_pdbs": [True, False]}
+    default_options = "shared=True", "include_pdbs=False"
     exports = "CMakeLists.txt"
     url="http://github.com/lasote/conan-gtest"
     license="https://github.com/google/googletest/blob/master/googletest/LICENSE"
+    
+    def config_options(self):
+        if self.settings.compiler != "Visual Studio":
+            del self.options.include_pdbs
     
     def source(self):
         zip_name = "release-%s.zip" % self.version
@@ -47,6 +51,10 @@ class GTestConan(ConanFile):
         self.copy(pattern="*.dll", dst="bin", src=".", keep_path=False)
         self.copy(pattern="*.so*", dst="lib", src=".", keep_path=False)
         self.copy(pattern="*.dylib*", dst="lib", src=".", keep_path=False)      
+        
+        # Copying debug symbols
+        if self.settings.compiler == "Visual Studio" and self.options.include_pdbs:
+            self.copy(pattern="*.pdb", dst="lib", src=".", keep_path=False)
 
     def package_info(self):
         self.cpp_info.libs = ['gtest', 'gtest_main']
