@@ -20,7 +20,10 @@ class GTestConan(ConanFile):
     
     def config_options(self):
         if self.settings.compiler != "Visual Studio":
-            del self.options.include_pdbs
+            try:  # It might have already been removed if required by more than 1 package
+                del self.options.include_pdbs
+            except:
+                pass
     
     def source(self):
         zip_name = "release-%s.zip" % self.version
