@@ -6,7 +6,7 @@ language: python
 env:
   global:
     - CONAN_UPLOAD=1
-    - CONAN_REFERENCE="gtest/1.7.0"
+    - CONAN_REFERENCE="gtest/1.8.0"
     - CONAN_USERNAME="lasote"
     - CONAN_CHANNEL="testing"
     - CONAN_TOTAL_PAGES=1

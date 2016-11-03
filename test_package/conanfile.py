@@ -8,7 +8,7 @@ class DefaultNameConan(ConanFile):
     version = "0.1"
     settings = "os", "compiler", "arch", "build_type"
     generators = "cmake"
-    requires = "gtest/1.7.0@lasote/stable"
+    requires = "gtest/1.8.0@lasote/stable"
         
     def build(self):
         cmake = CMake(self.settings)

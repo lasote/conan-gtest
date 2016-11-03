@@ -8,7 +8,7 @@ from conans import CMake
 
 class GTestConan(ConanFile):
     name = "gtest"
-    version = "1.7.0"
+    version = "1.8.0"
     ZIP_FOLDER_NAME = "googletest-release-%s" % version
     generators = "cmake"
     settings = "os", "arch", "compiler", "build_type"
@@ -46,7 +46,8 @@ class GTestConan(ConanFile):
 
     def package(self):
         # Copying headers
-        self.copy(pattern="*.h", dst="include", src="%s/include" % self.ZIP_FOLDER_NAME, keep_path=True)
+        self.copy(pattern="*.h", dst="include", src="%s/googletest/include" % self.ZIP_FOLDER_NAME, keep_path=True)
+        self.copy(pattern="*.h", dst="include", src="%s/googlemock/include" % self.ZIP_FOLDER_NAME, keep_path=True)
 
         # Copying static and dynamic libs
         self.copy(pattern="*.a", dst="lib", src=".", keep_path=False)

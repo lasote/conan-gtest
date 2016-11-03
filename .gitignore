@@ -1,6 +1,6 @@
-build
+test_package/build
 *.pyc
 /_build
 conanbuildinfo.cmake
 conaninfo.txt
-/gtest-1.7.0
+/gtest-1.8.0
