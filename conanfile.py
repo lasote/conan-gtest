@@ -61,7 +61,7 @@ class GTestConan(ConanFile):
             self.copy(pattern="*.pdb", dst="lib", src=".", keep_path=False)
 
     def package_info(self):
-        self.cpp_info.libs = ['gtest', 'gtest_main']
+        self.cpp_info.libs = ['gtest', 'gtest_main', 'gmock', 'gmock_main']
         if self.settings.os == "Linux":
             self.cpp_info.libs.append("pthread")
         
