@@ -12,8 +12,8 @@ class GTestConan(ConanFile):
     ZIP_FOLDER_NAME = "googletest-release-%s" % version
     generators = "cmake"
     settings = "os", "arch", "compiler", "build_type"
-    options = {"shared": [True, False], "include_pdbs": [True, False]}
-    default_options = "shared=True", "include_pdbs=False"
+    options = {"shared": [True, False], "include_pdbs": [True, False], "cygwin_msvc": [True, False]}
+    default_options = "shared=True", "include_pdbs=False", "cygwin_msvc=False"
     exports = "CMakeLists.txt"
     url="http://github.com/lasote/conan-gtest"
     license="https://github.com/google/googletest/blob/master/googletest/LICENSE"
@@ -34,7 +34,8 @@ class GTestConan(ConanFile):
 
     def build(self):
         cmake = CMake(self.settings)
-        if self.settings.os == "Windows":
+        msdos_shell = (self.settings.os == "Windows") and (self.options.cygwin_msvc == False)
+        if msdos_shell:
             self.run("IF not exist _build mkdir _build")
         else:
             self.run("mkdir _build")
@@ -61,7 +62,7 @@ class GTestConan(ConanFile):
             self.copy(pattern="*.pdb", dst="lib", src=".", keep_path=False)
 
     def package_info(self):
-        self.cpp_info.libs = ['gtest', 'gtest_main']
+        self.cpp_info.libs = ['gtest', 'gtest_main', 'gmock', 'gmock_main']
         if self.settings.os == "Linux":
             self.cpp_info.libs.append("pthread")
         
