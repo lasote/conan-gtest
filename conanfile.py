@@ -41,6 +41,7 @@ class GTestConan(ConanFile):
         cd_build = "cd _build"
         force = "-Dgtest_force_shared_crt=ON"
         shared = "-DBUILD_SHARED_LIBS=1" if self.options.shared else ""
+
         self.run('%s && cmake .. %s %s %s' % (cd_build, cmake.command_line, shared, force))
         self.run("%s && cmake --build . %s" % (cd_build, cmake.build_config))
 
@@ -66,3 +67,5 @@ class GTestConan(ConanFile):
         
         if self.options.shared:
             self.cpp_info.defines.append("GTEST_LINKED_AS_SHARED_LIBRARY=1")
+            if self.settings.compiler == "Visual Studio" and self.settings.compiler.version == "11":
+                self.cpp_info.defines.append('_VARIADIC_MAX=10')
