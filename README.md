@@ -48,15 +48,12 @@ needed to link with the other dependencies.
 ### Ubuntu 16.04 support
 
 On Ubuntu and using `clang`, we have found that linking with this package may cause
-the "undefined reference" issue (see [#23](https://github.com/lasote/conan-gtest/issues/23)).
+the "undefined reference" issue if not linked to `libstdc++11` (see also
+[#23](https://github.com/lasote/conan-gtest/issues/23)).
 
-This is the recommended command sequence:
+This is the recommended build command:
 
-    $ mkdir .conan && cd .conan
     $ conan install .. -s compiler=clang -s compiler.version=3.6 \
         -s compiler.libcxx=libstdc++11 --build=missing
-    $ mkdir ../build && cd ../build
-    $ cmake ..
-    $ cmake --build .
 
 Also, make sure to use the `gtest:shared=False` option, as shown above.
