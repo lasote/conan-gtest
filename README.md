@@ -33,6 +33,8 @@ If you handle multiple dependencies in your project, it would be better to add a
     [options]
     gtest:shared=False
     gtest:include_pdbs=false # MSVC - include debug symbols
+    gtest:gmock=True # include Google Mock
+    gtest:main=True # link with main() provided by gtest/gmock
 
     [generators]
     txt

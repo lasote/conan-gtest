@@ -12,19 +12,21 @@ class GTestConan(ConanFile):
     ZIP_FOLDER_NAME = "googletest-release-%s" % version
     generators = "cmake"
     settings = "os", "arch", "compiler", "build_type"
-    options = {"shared": [True, False], "include_pdbs": [True, False], "cygwin_msvc": [True, False]}
-    default_options = "shared=True", "include_pdbs=False", "cygwin_msvc=False"
+    options = {"shared": [True, False], "include_pdbs": [True, False], "cygwin_msvc": [True, False],
+               "gmock": [True, False], "main": [True, False]}
+    default_options = ("shared=True", "include_pdbs=False", "cygwin_msvc=False",
+                       "gmock=True", "main=True")
     exports = "CMakeLists.txt"
     url="http://github.com/lasote/conan-gtest"
     license="https://github.com/google/googletest/blob/master/googletest/LICENSE"
-    
+
     def config_options(self):
         if self.settings.compiler != "Visual Studio":
             try:  # It might have already been removed if required by more than 1 package
                 del self.options.include_pdbs
             except:
                 pass
-    
+
     def source(self):
         zip_name = "release-%s.zip" % self.version
         url = "https://github.com/google/googletest/archive/%s" % zip_name
@@ -48,23 +50,28 @@ class GTestConan(ConanFile):
     def package(self):
         # Copying headers
         self.copy(pattern="*.h", dst="include", src="%s/googletest/include" % self.ZIP_FOLDER_NAME, keep_path=True)
-        self.copy(pattern="*.h", dst="include", src="%s/googlemock/include" % self.ZIP_FOLDER_NAME, keep_path=True)
+        if self.options.gmock:
+            self.copy(pattern="*.h", dst="include", src="%s/googlemock/include" % self.ZIP_FOLDER_NAME, keep_path=True)
 
         # Copying static and dynamic libs
         self.copy(pattern="*.a", dst="lib", src=".", keep_path=False)
         self.copy(pattern="*.lib", dst="lib", src=".", keep_path=False)
         self.copy(pattern="*.dll", dst="bin", src=".", keep_path=False)
         self.copy(pattern="*.so*", dst="lib", src=".", keep_path=False)
-        self.copy(pattern="*.dylib*", dst="lib", src=".", keep_path=False)      
-        
+        self.copy(pattern="*.dylib*", dst="lib", src=".", keep_path=False)
+
         # Copying debug symbols
         if self.settings.compiler == "Visual Studio" and self.options.include_pdbs:
             self.copy(pattern="*.pdb", dst="lib", src=".", keep_path=False)
 
     def package_info(self):
-        self.cpp_info.libs = ['gtest', 'gtest_main', 'gmock', 'gmock_main']
+        self.cpp_info.libs = ["gtest"]
+        if self.options.gmock:
+            self.cpp_info.libs.append("gmock")
+        if self.options.main:
+            self.cpp_info.libs.append("gmock_main" if self.options.gmock else "gtest_main")
         if self.settings.os == "Linux":
             self.cpp_info.libs.append("pthread")
-        
+
         if self.options.shared:
             self.cpp_info.defines.append("GTEST_LINKED_AS_SHARED_LIBRARY=1")
