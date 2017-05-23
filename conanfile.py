@@ -13,9 +13,9 @@ class GTestConan(ConanFile):
     generators = "cmake"
     settings = "os", "arch", "compiler", "build_type"
     options = {"shared": [True, False], "include_pdbs": [True, False], "cygwin_msvc": [True, False],
-               "gmock": [True, False], "main": [True, False]}
+               "no_gmock": [True, False], "no_main": [True, False]}
     default_options = ("shared=True", "include_pdbs=False", "cygwin_msvc=False",
-                       "gmock=True", "main=True")
+                       "no_gmock=False", "no_main=False")
     exports = "CMakeLists.txt"
     url="http://github.com/lasote/conan-gtest"
     license="https://github.com/google/googletest/blob/master/googletest/LICENSE"
@@ -50,7 +50,7 @@ class GTestConan(ConanFile):
     def package(self):
         # Copying headers
         self.copy(pattern="*.h", dst="include", src="%s/googletest/include" % self.ZIP_FOLDER_NAME, keep_path=True)
-        if self.options.gmock:
+        if not self.options.no_gmock:
             self.copy(pattern="*.h", dst="include", src="%s/googlemock/include" % self.ZIP_FOLDER_NAME, keep_path=True)
 
         # Copying static and dynamic libs
@@ -66,10 +66,10 @@ class GTestConan(ConanFile):
 
     def package_info(self):
         self.cpp_info.libs = ["gtest"]
-        if self.options.gmock:
+        if not self.options.no_gmock:
             self.cpp_info.libs.append("gmock")
-        if self.options.main:
-            self.cpp_info.libs.append("gmock_main" if self.options.gmock else "gtest_main")
+        if not self.options.no_main:
+            self.cpp_info.libs.append("gtest_main" if self.options.no_gmock else "gmock_main")
         if self.settings.os == "Linux":
             self.cpp_info.libs.append("pthread")
 
