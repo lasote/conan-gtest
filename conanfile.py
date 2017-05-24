@@ -44,7 +44,10 @@ class GTestConan(ConanFile):
         cd_build = "cd _build"
         force = "-Dgtest_force_shared_crt=ON"
         shared = "-DBUILD_SHARED_LIBS=1" if self.options.shared else ""
-        self.run('%s && cmake .. %s %s %s' % (cd_build, cmake.command_line, shared, force))
+        build_gtest = "-DBUILD_GTEST=%s" % ("ON" if self.options.no_gmock else "OFF")
+        build_gmock = "-DBUILD_GMOCK=%s" % ("OFF" if self.options.no_gmock else "ON")
+        self.run('%s && cmake .. %s %s %s %s %s' % (cd_build, cmake.command_line, shared, force,
+                                                    build_gtest, build_gmock))
         self.run("%s && cmake --build . %s" % (cd_build, cmake.build_config))
 
     def package(self):
@@ -65,11 +68,19 @@ class GTestConan(ConanFile):
             self.copy(pattern="*.pdb", dst="lib", src=".", keep_path=False)
 
     def package_info(self):
-        self.cpp_info.libs = ["gtest"]
-        if not self.options.no_gmock:
-            self.cpp_info.libs.append("gmock")
-        if not self.options.no_main:
-            self.cpp_info.libs.append("gtest_main" if self.options.no_gmock else "gmock_main")
+        # See https://github.com/google/googletest/issues/1015 for which
+        # libraries should be used when gtest/gmock are built with CMake.
+        if self.options.no_gmock:
+            if self.options.no_main:
+                self.cpp_info.libs = ["gtest"]
+            else:
+                self.cpp_info.libs = ["gtest", "gtest_main"]
+        else:
+            if self.options.no_main:
+                self.cpp_info.libs = ["gmock"]
+            else:
+                self.cpp_info.libs = ["gmock_main"]
+
         if self.settings.os == "Linux":
             self.cpp_info.libs.append("pthread")
 
