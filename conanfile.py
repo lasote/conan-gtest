@@ -1,7 +1,7 @@
-from conans import ConanFile, tools, CMake
-from conans.util import files
 import os
 
+from conans import ConanFile, tools, CMake
+from conans.util import files
 
 
 class GTestConan(ConanFile):
@@ -14,9 +14,10 @@ class GTestConan(ConanFile):
                "no_gmock": [True, False], "no_main": [True, False], "fpic": [True, False]}
     default_options = ("shared=True", "include_pdbs=False", "cygwin_msvc=False",
                        "no_gmock=False", "no_main=False", "fpic=False")
-    exports = "CMakeLists.txt"
-    url="http://github.com/lasote/conan-gtest"
-    license="https://github.com/google/googletest/blob/master/googletest/LICENSE"
+    exports_sources = "CMakeLists.txt"
+    url = "http://github.com/lasote/conan-gtest"
+    license = "https://github.com/google/googletest/blob/master/googletest/LICENSE"
+    description = "Google's C++ test framework"
 
     def config_options(self):
         if self.settings.compiler != "Visual Studio":
@@ -45,10 +46,12 @@ class GTestConan(ConanFile):
             cmake.definitions["BUILD_GTEST"] = "ON" if self.options.no_gmock else "OFF"
             cmake.definitions["BUILD_GMOCK"] = "OFF" if self.options.no_gmock else "ON"
 
-            cmake.configure(build_dir=".")
+            cmake.configure(build_dir=".", source_dir="../")
             cmake.build(build_dir=".")
 
     def package(self):
+        # Copy the license files
+        self.copy("license*", src="%s/googletest" % self.ZIP_FOLDER_NAME, dst=".", ignore_case=True, keep_path=False)
         # Copying headers
         self.copy(pattern="*.h", dst="include", src="%s/googletest/include" % self.ZIP_FOLDER_NAME, keep_path=True)
         if not self.options.no_gmock:
