@@ -37,7 +37,7 @@ class GTestConan(ConanFile):
         files.mkdir("_build")
         with tools.chdir("_build"):
             cmake = CMake(self)
-            if self.settings.compiler == "Visual Studio" and "MD" in self.settings.compiler.runtime:
+            if self.settings.compiler == "Visual Studio" and "MD" in str(self.settings.compiler.runtime):
                 cmake.definitions["gtest_force_shared_crt"] = "ON"
             if self.options.shared:
                 cmake.definitions["BUILD_SHARED_LIBS"] = "1"
