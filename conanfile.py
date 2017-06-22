@@ -38,7 +38,7 @@ class GTestConan(ConanFile):
         files.mkdir("_build")
         with tools.chdir("_build"):
             cmake = CMake(self)
-            if not self.options.force_shared_crt:
+            if self.options.force_shared_crt:
                 cmake.definitions["gtest_force_shared_crt"] = "ON"
             if self.options.shared:
                 cmake.definitions["BUILD_SHARED_LIBS"] = "1"
