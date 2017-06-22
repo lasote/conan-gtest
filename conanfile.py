@@ -11,9 +11,10 @@ class GTestConan(ConanFile):
     generators = "cmake"
     settings = "os", "arch", "compiler", "build_type"
     options = {"shared": [True, False], "include_pdbs": [True, False], "cygwin_msvc": [True, False],
-               "no_gmock": [True, False], "no_main": [True, False], "fpic": [True, False]}
+               "no_gmock": [True, False], "no_main": [True, False], "fpic": [True, False],
+               "force_shared_crt": [True, False]}
     default_options = ("shared=True", "include_pdbs=False", "cygwin_msvc=False",
-                       "no_gmock=False", "no_main=False", "fpic=False")
+                       "no_gmock=False", "no_main=False", "fpic=False", "force_shared_crt=False")
     exports_sources = "CMakeLists.txt"
     url = "http://github.com/lasote/conan-gtest"
     license = "https://github.com/google/googletest/blob/master/googletest/LICENSE"
@@ -37,7 +38,8 @@ class GTestConan(ConanFile):
         files.mkdir("_build")
         with tools.chdir("_build"):
             cmake = CMake(self)
-            cmake.definitions["gtest_force_shared_crt"] = "ON"
+            if not self.options.force_shared_crt:
+                cmake.definitions["gtest_force_shared_crt"] = "ON"
             if self.options.shared:
                 cmake.definitions["BUILD_SHARED_LIBS"] = "1"
             if self.options.fpic:
