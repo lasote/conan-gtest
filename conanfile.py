@@ -89,5 +89,5 @@ class GTestConan(ConanFile):
         if self.options.shared:
             self.cpp_info.defines.append("GTEST_LINKED_AS_SHARED_LIBRARY=1")
 
-        if self.settings.compiler == "Visual Studio" and self.settings.compiler.version >= 15:
+        if float(str(self.settings.compiler.version)) >= 15 and self.settings.compiler == "Visual Studio":
             self.cpp_info.defines.append("GTEST_LANG_CXX11=1")
